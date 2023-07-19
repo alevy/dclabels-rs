@@ -22,7 +22,7 @@ pub use component::*;
 
 pub type Principal = alloc::string::String;
 
-#[derive(PartialEq, Eq, Clone, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Clone, PartialOrd, Ord, Debug, Serialize, Deserialize)]
 pub struct Buckle {
     pub secrecy: Component,
     pub integrity: Component,
