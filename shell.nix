@@ -3,5 +3,5 @@
 with pkgs;
 
 mkShell {
-  buildInputs = [ cargo rustc rustfmt ];
+  buildInputs = [ cargo rustc rustfmt rust-analyzer ];
 }

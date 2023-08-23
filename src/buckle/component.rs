@@ -40,11 +40,11 @@ impl Component {
         Component::DCFormula(result)
     }
 
-    pub fn dc_false() -> Self {
+    pub const fn dc_false() -> Self {
         Component::DCFalse
     }
 
-    pub fn dc_true() -> Self {
+    pub const fn dc_true() -> Self {
         Component::DCFormula(BTreeSet::new())
     }
 

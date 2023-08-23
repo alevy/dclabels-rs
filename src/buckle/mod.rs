@@ -43,7 +43,7 @@ impl Buckle {
         use alloc::collections::BTreeSet;
         use nom::{
             bytes::complete::{escaped_transform, tag},
-            character::complete::{alphanumeric1, one_of},
+            character::complete::{none_of, one_of},
             multi::separated_list1,
             sequence::tuple,
             Parser,
@@ -60,7 +60,7 @@ impl Buckle {
                             tag("|"),
                             separated_list1(
                                 tag("/"),
-                                escaped_transform(alphanumeric1, '\\', one_of(r#",|&/\"#)),
+                                escaped_transform(none_of(r#",|&/\"#), '\\', one_of(r#",|&/\"#)),
                             ),
                         ),
                     ),
@@ -457,6 +457,14 @@ mod tests {
             Buckle::parse("Amit/test,Amit"),
             Ok(Buckle::new(
                 Component::from([Clause::new_from_vec(vec![vec!["Amit", "test"]])]),
+                [["Amit"]]
+            ))
+        );
+
+        assert_eq!(
+            Buckle::parse("princeton.edu/test,Amit"),
+            Ok(Buckle::new(
+                Component::from([Clause::new_from_vec(vec![vec!["princeton.edu", "test"]])]),
                 [["Amit"]]
             ))
         )
