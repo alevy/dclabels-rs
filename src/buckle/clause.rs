@@ -1,5 +1,8 @@
+use core::fmt::Display;
+
 #[cfg(test)]
 use alloc::boxed::Box;
+use alloc::string::String;
 #[cfg(test)]
 use quickcheck::Arbitrary;
 
@@ -11,6 +14,12 @@ use alloc::{collections::BTreeSet, vec::Vec};
 
 #[derive(Eq, PartialEq, PartialOrd, Ord, Debug, Clone, Serialize, Deserialize)]
 pub struct Clause(pub BTreeSet<Vec<Principal>>);
+
+impl Display for Clause {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str(&self.0.iter().map(|ps| ps.join("/")).collect::<Vec<String>>().join("|"))
+    }
+}
 
 #[cfg(test)]
 impl Arbitrary for Clause {

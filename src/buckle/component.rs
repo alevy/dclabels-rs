@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 #[cfg(test)]
 use alloc::boxed::Box;
 #[cfg(test)]
@@ -5,12 +7,24 @@ use quickcheck::{empty_shrinker, Arbitrary};
 use serde::{Deserialize, Serialize};
 
 use super::clause::Clause;
-use alloc::collections::BTreeSet;
+use alloc::{collections::BTreeSet, string::{ToString, String}, vec::Vec};
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Serialize, Deserialize)]
 pub enum Component {
     DCFalse,
     DCFormula(BTreeSet<Clause>),
+}
+
+impl Display for Component {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Self::DCFalse => f.write_str("F"),
+            o if o.is_true() => f.write_str("T"),
+            Self::DCFormula(o) => {
+                f.write_str(&o.iter().map(ToString::to_string).collect::<Vec<String>>().join("&"))
+            }
+        }
+    }
 }
 
 #[cfg(test)]

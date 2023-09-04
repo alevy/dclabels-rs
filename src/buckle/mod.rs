@@ -5,6 +5,8 @@
 //! unlike DCLabels, Buckle principals are not strings, but rather ordered
 //! lists, where prefixes imply longer lists.
 
+use core::fmt::Display;
+
 #[cfg(test)]
 use alloc::boxed::Box;
 use alloc::vec::Vec;
@@ -26,6 +28,12 @@ pub type Principal = alloc::string::String;
 pub struct Buckle {
     pub secrecy: Component,
     pub integrity: Component,
+}
+
+impl Display for Buckle {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{},{}", self.secrecy, self.integrity)
+    }
 }
 
 impl Buckle {
@@ -263,6 +271,12 @@ mod tests {
 
     #[test]
     fn test_downgrade() {
+
+        let privilege = &Component::formula([Clause::new(["princeton.edu", "aalevy"])]);
+        assert_eq!(
+            Buckle::new(true, privilege.clone()),
+            Buckle::new(Component::formula([Clause::new(["princeton.edu", "aalevy"])]), true).downgrade(privilege)
+        );
         // True can't downgrade anything
         assert_eq!(
             Buckle::new(true, true),
